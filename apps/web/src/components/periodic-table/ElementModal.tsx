@@ -300,7 +300,7 @@ export default function ElementModal({
 
           {/* Right Visual Pane: 3D Atom Renderer (65% width) */}
           {(!isMobile || activeMobileTab === "model") && (
-            <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-900/10 p-6 flex flex-col items-center justify-between min-h-[350px] md:min-h-[500px] h-full flex-1">
+            <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-900/10 max-md:p-4 md:p-6 flex flex-col items-center justify-center max-md:min-h-[250px] md:min-h-[500px] h-full flex-1">
               
               {/* Custom Close Button overlay */}
               <button

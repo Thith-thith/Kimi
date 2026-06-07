@@ -50,7 +50,7 @@ export default function Dock({ items, activePath, className }: DockProps) {
                         y: isHovered ? -2 : 0,
                       }}
                       transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.5 }}
-                      className="relative flex flex-col items-center gap-0.5"
+                      className="relative flex flex-col items-center gap-1"
                     />
                   }
                 >
@@ -85,12 +85,12 @@ export default function Dock({ items, activePath, className }: DockProps) {
                     )}
                   </Link>
 
-                  {/* Label — hidden when active but keeps space to prevent layout shift */}
+                  {/* Label — always visible, highlighted when active */}
                   <span
                     className={cn(
-                      "text-[9px] leading-none font-medium transition-all duration-100 select-none",
+                      "text-[8.5px] tracking-tight leading-none font-semibold transition-all duration-100 select-none whitespace-nowrap",
                       isActive
-                        ? "opacity-0 pointer-events-none"
+                        ? "text-zinc-900 dark:text-white"
                         : "text-zinc-400 dark:text-zinc-500"
                     )}
                   >

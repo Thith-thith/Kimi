@@ -99,6 +99,15 @@ export default function AtomRenderer({
 
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    
+    // Ensure canvas is block and absolutely positioned to cover containerRef bounds perfectly
+    renderer.domElement.style.position = "absolute";
+    renderer.domElement.style.top = "0";
+    renderer.domElement.style.left = "0";
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
+
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -479,7 +488,16 @@ export default function AtomRenderer({
     const maxRadius = 4.2 + Math.max(0, activeShellCount - 1) * 2.2;
     const vFOV = 45 * (Math.PI / 180);
     const targetCameraZ = (maxRadius * 1.3) / Math.tan(vFOV / 2);
-    camera.position.z = Math.max(12, targetCameraZ);
+    
+    // Scale camera Z further away on portrait screens to shrink the visual size of the atom
+    const aspect = width / height;
+    let finalCameraZ = Math.max(12, targetCameraZ);
+    if (aspect < 1) {
+      finalCameraZ = (finalCameraZ / aspect) * 1.02;
+    } else {
+      finalCameraZ = finalCameraZ * 1.15;
+    }
+    camera.position.z = Math.max(12, finalCameraZ);
 
     // ── Raycaster setup (for orbit-ring hover/click in layers mode) ──────────
     const raycaster = new THREE.Raycaster();
@@ -616,7 +634,7 @@ export default function AtomRenderer({
       const zoomSpeed = 0.02;
       camera.position.z += e.deltaY * zoomSpeed;
       const minZ = 6;
-      const maxZ = Math.max(40, targetCameraZ * 2.5);
+      const maxZ = Math.max(40, finalCameraZ * 2.5);
       camera.position.z = THREE.MathUtils.clamp(camera.position.z, minZ, maxZ);
     };
 
@@ -677,7 +695,19 @@ export default function AtomRenderer({
       for (let entry of entries) {
         const { width: w, height: h } = entry.contentRect;
         if (w > 0 && h > 0) {
-          camera.aspect = w / h;
+          const currentAspect = w / h;
+          camera.aspect = currentAspect;
+          
+          // Re-calculate camera Z dynamically on resize to keep size consistent and responsive
+          let newCameraZ = Math.max(12, targetCameraZ);
+          if (currentAspect < 1) {
+            newCameraZ = (newCameraZ / currentAspect) * 1.02;
+          } else {
+            newCameraZ = newCameraZ * 1.15;
+          }
+          finalCameraZ = newCameraZ;
+          camera.position.z = Math.max(12, finalCameraZ);
+          
           camera.updateProjectionMatrix();
           renderer.setSize(w, h);
         }

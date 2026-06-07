@@ -245,7 +245,7 @@ export default function IonModal({ ion, isOpen, onClose }: IonModalProps) {
         <div className="flex flex-col md:flex-row h-full w-full min-w-0">
           
           {/* Left Details Pane: Card Details Slider (35% width) */}
-          <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b border-zinc-200 dark:border-zinc-800/60 md:border-b-0">
+          <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b-0 h-full flex-1">
             
             {/* Header info - Symbol & Name (Desktop only) */}
             <div>
@@ -635,42 +635,44 @@ export default function IonModal({ ion, isOpen, onClose }: IonModalProps) {
 
           </div>
 
-          {/* Right Visual Pane: 3D visual & Coming Soon message (65% width) */}
-          <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-50/50 dark:bg-zinc-900/10 p-6 flex flex-col items-center justify-between min-h-[350px] md:min-h-[500px]">
-            
-            {/* Custom Close Button overlay placed on visual pane top-right (Desktop only) */}
-            {!isMobile && (
-              <button
-                onClick={onClose}
-                className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full bg-zinc-100/80 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-250 dark:border-zinc-800/80 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-905 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95"
-                aria-label="Close dialog"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+          {/* Right Visual Pane: 3D visual & Coming Soon message (65% width) - Desktop only */}
+          {!isMobile && (
+            <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-50/50 dark:bg-zinc-900/10 p-6 flex flex-col items-center justify-between min-h-[350px] md:min-h-[500px]">
+              
+              {/* Custom Close Button overlay placed on visual pane top-right (Desktop only) */}
+              {!isMobile && (
+                <button
+                  onClick={onClose}
+                  className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full bg-zinc-100/80 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-250 dark:border-zinc-800/80 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-905 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95"
+                  aria-label="Close dialog"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
 
-            {/* Glowing Atomic particle visual placeholder */}
-            <div className="w-full flex-1 flex flex-col items-center justify-center relative">
-              <div className={`w-24 h-24 rounded-full ${isCation ? 'bg-yellow-500/10 border-yellow-500/20' : 'bg-teal-500/10 border-teal-500/20'} absolute animate-ping duration-1000`} />
-              <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/80 shadow-inner flex items-center justify-center relative z-10">
-                <span className={`text-2xl font-black font-mono ${particleColor}`}>
-                  {ion.charge}
+              {/* Glowing Atomic particle visual placeholder */}
+              <div className="w-full flex-1 flex flex-col items-center justify-center relative">
+                <div className={`w-24 h-24 rounded-full ${isCation ? 'bg-yellow-500/10 border-yellow-500/20' : 'bg-teal-500/10 border-teal-500/20'} absolute animate-ping duration-1000`} />
+                <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/80 shadow-inner flex items-center justify-center relative z-10">
+                  <span className={`text-2xl font-black font-mono ${particleColor}`}>
+                    {ion.charge}
+                  </span>
+                </div>
+                <span className={`text-[10px] font-bold mt-6 tracking-widest px-3 py-1 rounded-full uppercase ${isCation ? 'bg-yellow-400/15 border-yellow-400/25 text-yellow-400' : 'bg-teal-400/15 border-teal-400/25 text-teal-400'} mb-2`}>
+                  {t("ionModal.comingSoonBadge")}
+                </span>
+                <p className="text-xs text-zinc-550 dark:text-zinc-400 font-medium text-center max-w-xs px-4">
+                  {t("ionModal.visualHint")}
+                </p>
+              </div>
+
+              <div className="w-full text-center z-10 hidden md:block">
+                <span className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold tracking-tight">
+                  {t("ionModal.activeDevelopment")}
                 </span>
               </div>
-              <span className={`text-[10px] font-bold mt-6 tracking-widest px-3 py-1 rounded-full uppercase ${isCation ? 'bg-yellow-400/15 border-yellow-400/25 text-yellow-400' : 'bg-teal-400/15 border-teal-400/25 text-teal-400'} mb-2`}>
-                {t("ionModal.comingSoonBadge")}
-              </span>
-              <p className="text-xs text-zinc-550 dark:text-zinc-400 font-medium text-center max-w-xs px-4">
-                {t("ionModal.visualHint")}
-              </p>
             </div>
-
-            <div className="w-full text-center z-10 hidden md:block">
-              <span className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold tracking-tight">
-                {t("ionModal.activeDevelopment")}
-              </span>
-            </div>
-          </div>
+          )}
 
         </div>
       </DialogContent>
