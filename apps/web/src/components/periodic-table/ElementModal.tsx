@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import { Element } from "@kimi/data";
 import { Dialog, DialogContent } from "../ui/dialog";
 import AtomRenderer from "../three/AtomRenderer";
@@ -194,52 +195,78 @@ export default function ElementModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent 
         showCloseButton={false}
-        className="max-w-[calc(100%-32px)] md:max-w-[1360px] md:h-[800px] h-[95vh] p-0 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden gap-0 select-none data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-250 flex flex-col"
+        className={cn(
+          // Mobile responsive: anchored bottom-to-top drawer
+          "max-md:top-auto max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:translate-x-0 max-md:translate-y-0",
+          "max-md:max-w-full max-md:w-full max-md:h-[92vh] max-md:rounded-t-3xl max-md:rounded-b-none max-md:border-x-0 max-md:border-b-0",
+          
+          // Desktop centered modal
+          "md:max-w-[1360px] md:h-[800px] md:rounded-3xl",
+          
+          // Shared styles
+          "p-0 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-xl shadow-2xl overflow-hidden gap-0 select-none flex flex-col",
+          
+          // Animations: slide up on mobile, zoom on desktop
+          "duration-350 ease-out",
+          "data-open:animate-in data-open:fade-in-0 max-md:data-open:slide-in-from-bottom-full md:data-open:zoom-in-95",
+          "data-closed:animate-out data-closed:fade-out-0 max-md:data-closed:slide-out-to-bottom-full md:data-closed:zoom-out-95"
+        )}
       >
         {/* Mobile Tab Swapper Header */}
         {isMobile && (
-          <div className="w-full flex items-center justify-center p-3 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-900 relative flex-shrink-0">
-            {/* Nuclide Header Stack info on mobile */}
-            <div className="absolute left-4 flex items-center gap-1.5 leading-none select-none">
-              <span className="text-xl font-black text-zinc-900 dark:text-white leading-none">
-                {element.symbol}
-              </span>
-              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-semibold truncate max-w-[80px]">
-                {localizedName}
-              </span>
-            </div>
-
-            <div className="inline-flex p-0.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 rounded-full">
-              <button
-                onClick={() => setActiveMobileTab("info")}
-                className={`px-4 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
-                  activeMobileTab === "info"
-                    ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs"
-                    : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-                }`}
-              >
-                Details
-              </button>
-              <button
-                onClick={() => setActiveMobileTab("model")}
-                className={`px-4 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
-                  activeMobileTab === "model"
-                    ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs"
-                    : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-                }`}
-              >
-                3D Model
-              </button>
+          <div className="w-full flex flex-col bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-900 relative flex-shrink-0">
+            {/* Drag Handle */}
+            <div className="w-full flex justify-center pt-3 pb-2.5">
+              <div className="w-10 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700/80" />
             </div>
             
-            {/* Mobile Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute right-4 w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-805 flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:hover:text-white transition-all duration-200 cursor-pointer active:scale-95 border border-zinc-200 dark:border-zinc-800"
-              aria-label="Close dialog"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+            {/* Navigation and Info Row */}
+            <div className="w-full flex items-center justify-between px-4 pb-3.5 pt-0.5 gap-2">
+              {/* Left: Element Symbol & Name */}
+              <div className="flex items-center gap-2 leading-none min-w-0">
+                <span className="text-2xl font-black text-zinc-900 dark:text-white leading-none">
+                  {element.symbol}
+                </span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold truncate max-w-[80px]">
+                  {localizedName}
+                </span>
+              </div>
+
+              {/* Center: Tabs Switcher */}
+              <div className="inline-flex p-0.5 bg-zinc-100 dark:bg-zinc-900/80 border border-zinc-200/50 dark:border-zinc-800/80 rounded-full flex-shrink-0">
+                <button
+                  onClick={() => setActiveMobileTab("info")}
+                  className={`px-4.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeMobileTab === "info"
+                      ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs"
+                      : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full bg-current transition-opacity ${activeMobileTab === "info" ? "opacity-100" : "opacity-40"}`} />
+                  Details
+                </button>
+                <button
+                  onClick={() => setActiveMobileTab("model")}
+                  className={`px-4.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeMobileTab === "model"
+                      ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs"
+                      : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full bg-current transition-opacity ${activeMobileTab === "model" ? "opacity-100" : "opacity-40"}`} />
+                  3D Model
+                </button>
+              </div>
+              
+              {/* Right: Close button */}
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:hover:text-white transition-all duration-150 cursor-pointer active:scale-95 border border-zinc-200 dark:border-zinc-800/80 flex-shrink-0"
+                aria-label="Close dialog"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
 
@@ -248,7 +275,7 @@ export default function ElementModal({
           
           {/* Left Details Pane: Card Details Slider (35% width) */}
           {(!isMobile || activeMobileTab === "info") && (
-            <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b border-zinc-200 dark:border-zinc-800/60 md:border-b-0 h-full">
+            <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto scrollbar-hide bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b border-zinc-200 dark:border-zinc-800/60 md:border-b-0 h-full">
               {/* Nuclide Header Stack info */}
               <div className="hidden md:flex items-center gap-3 mb-6 select-none pl-1">
                 <div className="flex flex-col text-right leading-none font-bold text-xs font-mono text-zinc-500 dark:text-zinc-400 select-none gap-0.5">
@@ -436,33 +463,33 @@ export default function ElementModal({
               {/* Play/Pause Button */}
               <button
                 onClick={() => setIsPaused(!isPaused)}
-                className="w-10 h-10 rounded-full bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-zinc-650 dark:text-zinc-300 hover:text-zinc-950 hover:dark:text-white hover:border-zinc-350 hover:dark:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+                className="w-11 h-11 md:w-10 md:h-10 rounded-full bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-zinc-650 dark:text-zinc-300 hover:text-zinc-950 hover:dark:text-white hover:border-zinc-350 hover:dark:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
                 title={isPaused ? "Play Animation" : "Pause Animation"}
               >
-                {isPaused ? <Play className="w-4 h-4 fill-current" /> : <Pause className="w-4 h-4 fill-current" />}
+                {isPaused ? <Play className="w-[18px] h-[18px] md:w-4 md:h-4 fill-current" /> : <Pause className="w-[18px] h-[18px] md:w-4 md:h-4 fill-current" />}
               </button>
 
               {/* Layers Button */}
               <button
                 onClick={() => setShowLayers(!showLayers)}
-                className={`w-10 h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95 ${
+                className={`w-11 h-11 md:w-10 md:h-10 rounded-full backdrop-blur-md border flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-95 ${
                   showLayers 
                     ? "bg-blue-600/20 border-blue-500/60 text-blue-500 dark:text-blue-400 hover:bg-blue-600/30" 
                     : "bg-white/60 dark:bg-zinc-950/60 border-zinc-200 dark:border-zinc-800/80 text-zinc-650 dark:text-zinc-300 hover:text-zinc-950 hover:dark:text-white hover:border-zinc-350 hover:dark:border-zinc-700 shadow-sm"
                 }`}
                 title={showLayers ? "Hide Orbital Layers" : "Show Orbital Layers"}
               >
-                <Layers className="w-4 h-4" />
+                <Layers className="w-[18px] h-[18px] md:w-4 md:h-4" />
               </button>
             </div>
 
             {/* Bottom Right Help/Info Overlay */}
             <div className="absolute bottom-6 right-6 z-10">
               <button
-                className="w-10 h-10 rounded-full bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-zinc-550 dark:text-zinc-400 hover:text-zinc-950 hover:dark:text-white hover:border-zinc-350 hover:dark:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+                className="w-11 h-11 md:w-10 md:h-10 rounded-full bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-zinc-550 dark:text-zinc-400 hover:text-zinc-950 hover:dark:text-white hover:border-zinc-350 hover:dark:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
                 title="Help & Info"
               >
-                <HelpCircle className="w-4 h-4" />
+                <HelpCircle className="w-[18px] h-[18px] md:w-4 md:h-4" />
               </button>
             </div>
 

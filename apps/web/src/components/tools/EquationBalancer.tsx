@@ -591,8 +591,8 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
       <div className="bg-white/95 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 md:p-8 shadow-md dark:shadow-none space-y-6 relative">
         
         {/* Header */}
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-zinc-100 dark:border-zinc-800 pb-4 w-full">
-          <div className="flex justify-start min-w-0">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-0 items-center border-b border-zinc-100 dark:border-zinc-800 pb-4 w-full">
+          <div className="flex justify-center md:justify-start min-w-0">
             <h2 className="text-base md:text-lg lg:text-xl font-bold tracking-tight text-zinc-900 dark:text-white truncate">
               {tBalancer("title")}
             </h2>
@@ -625,7 +625,7 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
           </div>
 
           {/* Close Button */}
-          <div className="flex justify-end">
+          <div className="hidden md:flex justify-end">
             {onClose ? (
               <button
                 onClick={onClose}
@@ -922,14 +922,14 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
               <div className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] gap-4 items-center">
                 <button
                   onClick={() => handleBalance(reactantsInput, productsInput)}
-                  className="bg-zinc-800 hover:bg-zinc-900 text-white dark:bg-zinc-200 dark:text-zinc-900 dark:hover:bg-white font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer text-sm"
+                  className="w-full md:w-auto bg-zinc-800 hover:bg-zinc-900 text-white dark:bg-zinc-200 dark:text-zinc-900 dark:hover:bg-white font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer text-sm"
                 >
                   {tBalancer("autoBalance")}
                 </button>
                 
                 <button
                   onClick={handleClearBalance}
-                  className="bg-white hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-300 font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer text-sm"
+                  className="w-full md:w-auto bg-white hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-300 font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer text-sm"
                 >
                   {tBalancer("clear")}
                 </button>
@@ -991,12 +991,12 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
                 <span className="text-xs text-zinc-500 dark:text-zinc-550 font-bold uppercase tracking-wider block">
                   {tBalancer("presets")}
                 </span>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 md:flex-wrap md:overflow-visible">
                   {BALANCE_PRESETS.map((preset) => (
                     <button
                       key={preset}
                       onClick={() => handleBalancePreset(preset)}
-                      className="bg-zinc-50 hover:bg-zinc-150/70 dark:bg-zinc-950/50 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-850 text-zinc-700 dark:text-zinc-300 text-xs px-3.5 py-2 rounded-xl transition-all font-mono font-bold hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 cursor-pointer shadow-sm"
+                      className="flex-shrink-0 bg-zinc-50 hover:bg-zinc-150/70 dark:bg-zinc-950/50 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-850 text-zinc-700 dark:text-zinc-300 text-xs px-3.5 py-2 rounded-xl transition-all font-mono font-bold hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 cursor-pointer shadow-sm"
                     >
                       {preset.replace(/->/g, "→")}
                     </button>
@@ -1167,12 +1167,12 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
                     <span className="text-xs text-zinc-500 dark:text-zinc-555 font-bold uppercase tracking-wider block">
                       Common Presets
                     </span>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 md:flex-wrap md:overflow-visible">
                       {PREDICT_PRESETS.map((preset, idx) => (
                         <button
                           key={idx}
                           onClick={() => handlePredictPreset(preset)}
-                          className="bg-white hover:bg-zinc-55 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-855 text-zinc-700 dark:text-zinc-300 text-xs px-3.5 py-2 rounded-xl transition-all font-mono font-bold hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 cursor-pointer shadow-sm"
+                          className="flex-shrink-0 bg-white hover:bg-zinc-55 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-855 text-zinc-700 dark:text-zinc-300 text-xs px-3.5 py-2 rounded-xl transition-all font-mono font-bold hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-95 cursor-pointer shadow-sm"
                         >
                           {preset.label}
                         </button>

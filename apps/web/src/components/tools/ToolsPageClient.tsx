@@ -76,14 +76,14 @@ export default function ToolsPageClient() {
         </div>
 
         {/* Grid of Tools */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {TOOLS.map((tool) => {
             const Icon = tool.icon;
             return (
               <Link
                 key={tool.id}
                 href={`/tools/${tool.id}`}
-                className="w-full text-left bg-white/80 dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/60 backdrop-blur-md rounded-2xl p-6 hover:scale-[1.01] hover:border-zinc-350 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 transition-all duration-300 group flex flex-col justify-between h-56 cursor-pointer relative overflow-hidden shadow-sm dark:shadow-none"
+                className="w-full text-left bg-white/80 dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/60 backdrop-blur-md rounded-2xl p-6 active:scale-[0.98] md:active:scale-100 md:hover:scale-[1.01] hover:border-zinc-350 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 transition-all duration-300 group flex flex-col justify-between min-h-[12rem] md:h-56 cursor-pointer relative overflow-hidden shadow-sm dark:shadow-none"
               >
                 {/* Decorative background glow on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-zinc-950/[0.01] dark:from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -117,7 +117,7 @@ export default function ToolsPageClient() {
                   </div>
                 </div>
 
-                <div className="text-[10px] font-semibold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors flex items-center gap-1 mt-4 relative z-10 font-sans">
+                <div className="text-[10px] font-semibold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white group-active:text-zinc-900 dark:group-active:text-white transition-colors flex items-center gap-1 mt-4 relative z-10 font-sans">
                   Launch Tool
                   <span className="inline-block transition-transform group-hover:translate-x-1 duration-300">→</span>
                 </div>

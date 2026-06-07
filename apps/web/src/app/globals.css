@@ -150,3 +150,96 @@ html[lang="km"] .text-\[9px\] {
 html[lang="km"] .text-\[8px\] {
   font-size: 0.625rem !important; /* ~10px based on scaled root font size */
 }
+
+/* ─── Mobile UX Foundation ─── */
+
+/* Safe area inset support for notched phones */
+@utility safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Hide scrollbar but keep scroll functionality */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Momentum-based smooth scrolling for touch */
+@utility scroll-smooth-touch {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Bottom tab bar safe area helper */
+@utility pb-safe {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Scroll shadow indicators for horizontal scroll containers */
+.scroll-shadow-x {
+  --shadow-size: 24px;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  background:
+    linear-gradient(to right, var(--bg, white) 30%, transparent) left center,
+    linear-gradient(to left, var(--bg, white) 30%, transparent) right center,
+    linear-gradient(to right, var(--shadow-color), transparent) left center,
+    linear-gradient(to left, var(--shadow-color), transparent) right center;
+  background-size:
+    var(--shadow-size) 100%,
+    var(--shadow-size) 100%,
+    var(--shadow-size) 100%,
+    var(--shadow-size) 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.dark .scroll-shadow-x {
+  --shadow-color: rgba(255, 255, 255, 0.04);
+  --bg: rgb(9 9 11);
+}
+
+/* Touch-optimized slider thumbs */
+@media (pointer: coarse) {
+  input[type="range"]::-webkit-slider-thumb {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* Bottom tab bar animation */
+@keyframes tab-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-tab-slide-up {
+  animation: tab-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Bottom sheet drag handle */
+.drag-handle::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(161, 161, 170, 0.4);
+  margin: 0 auto;
+}
+
+.dark .drag-handle::before {
+  background: rgba(113, 113, 122, 0.5);
+}

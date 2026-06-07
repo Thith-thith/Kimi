@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FlaskConical, RefreshCw, Pencil, HelpCircle, X, Plus } from "lucide-react";
+import { FlaskConical, RefreshCw, Pencil, HelpCircle, X, Plus, Flame } from "lucide-react";
 import Matter from "matter-js";
 
 interface VirtualLabProps {
@@ -128,6 +128,8 @@ export default function VirtualLab({ onClose }: VirtualLabProps) {
   const thermoFillRef = useRef<HTMLDivElement>(null);
   const thermoTempRef = useRef<HTMLDivElement>(null);
   const elementPickerRef = useRef<HTMLDivElement>(null);
+  const mobileSliderRef = useRef<HTMLDivElement>(null);
+  const [isSlidingMobile, setIsSlidingMobile] = useState(false);
 
   // Animation and physics state refs (avoid React render delay at 60fps)
   const stateRef = useRef({
@@ -1733,6 +1735,38 @@ export default function VirtualLab({ onClose }: VirtualLabProps) {
     }
   };
 
+  const updateMobileHeaterLevel = (clientY: number) => {
+    const track = mobileSliderRef.current;
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const relativeY = rect.bottom - clientY;
+    const percentage = Math.max(0, Math.min(100, (relativeY / rect.height) * 100));
+    const rounded = Math.round(percentage);
+    setHeaterLevel(rounded);
+    heaterRef.current = rounded;
+  };
+
+  const handleMobileSliderDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsSlidingMobile(true);
+    if (typeof e.currentTarget.setPointerCapture === "function") {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    updateMobileHeaterLevel(e.clientY);
+  };
+
+  const handleMobileSliderMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isSlidingMobile) return;
+    updateMobileHeaterLevel(e.clientY);
+  };
+
+  const handleMobileSliderUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    setIsSlidingMobile(false);
+    if (typeof e.currentTarget.releasePointerCapture === "function") {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
+
   const renderFormulaJSX = (formula: string) => {
     const parts = formula.split(/(\d+)/);
     return (
@@ -2274,6 +2308,10 @@ export default function VirtualLab({ onClose }: VirtualLabProps) {
             font-weight: 700;
         }
 
+        .virtual-lab-mobile-flame-control {
+            display: none;
+        }
+
         .virtual-lab-heater-control {
             position: absolute;
             left: 16px;
@@ -2551,6 +2589,267 @@ export default function VirtualLab({ onClose }: VirtualLabProps) {
                 height: 262.5px;
             }
         }
+
+        /* Picker backdrop overlay (mobile only) */
+        .virtual-lab-picker-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 199;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        /* Drag handle for mobile bottom sheet picker */
+        .virtual-lab-picker-drag-handle {
+            display: none;
+        }
+
+        /* ─── Mobile Styles (≤640px) ─── */
+        @media (max-width: 640px) {
+            .virtual-lab-shell {
+                height: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .virtual-lab-stage {
+                height: 380px !important;
+                flex: none !important;
+            }
+
+            .virtual-lab-scene {
+                height: 100% !important;
+            }
+
+            /* Bottom controls moved below the scene */
+            .virtual-lab-controls {
+                position: relative !important;
+                bottom: auto !important;
+                left: auto !important;
+                right: auto !important;
+                height: auto !important;
+                margin-top: 14px !important;
+                padding: 0 8px !important;
+                display: flex !important;
+                justify-content: center !important;
+                gap: 8px !important;
+                pointer-events: auto !important;
+                width: 100% !important;
+            }
+
+            .virtual-lab-btn {
+                flex: 1 !important;
+                min-width: 0 !important;
+                padding: 10px 8px !important;
+                font-weight: 700 !important;
+                font-size: 12px !important;
+                border-radius: 12px !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 4px !important;
+                white-space: nowrap !important;
+            }
+
+            /* Scale beaker to fit smaller stage height */
+            .virtual-lab-beaker-wrap {
+                width: 145px !important;
+                height: 203px !important;
+            }
+
+            /* Shrink Bunsen burner and tripod and translate down to align with beaker bottom */
+            .virtual-lab-burner-assembly {
+                transform: scale(0.78) translateY(34.5px) !important;
+                transform-origin: bottom center !important;
+            }
+
+            /* Compact thermometer side badge - moved to top-left to avoid mobile heater control overlap */
+            .virtual-lab-thermometer {
+                left: 8px !important;
+                top: 8px !important;
+                transform: none !important;
+                padding: 6px 8px !important;
+                border-radius: 10px !important;
+            }
+            .virtual-lab-thermo-track {
+                height: 60px !important;
+                width: 6px !important;
+            }
+            .virtual-lab-thermo-temp {
+                font-size: 9px !important;
+            }
+            .virtual-lab-thermo-label {
+                font-size: 7px !important;
+            }
+
+            /* Hide horizontal heater control on mobile */
+            .virtual-lab-heater-control {
+                display: none !important;
+            }
+
+            /* Custom vertical mobile flame control styles */
+            .virtual-lab-mobile-flame-control {
+                display: flex !important;
+                position: absolute !important;
+                left: 8px !important;
+                bottom: 8px !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 6px !important;
+                padding: 10px 8px !important;
+                border-radius: 14px !important;
+                background: rgba(255, 255, 255, 0.72) !important;
+                backdrop-filter: blur(12px) !important;
+                -webkit-backdrop-filter: blur(12px) !important;
+                border: 1px solid rgba(0,0,0,0.04) !important;
+                box-shadow:
+                    0 2px 8px rgba(0, 0, 0, 0.03),
+                    0 8px 24px rgba(0, 0, 0, 0.05),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+                z-index: 15 !important;
+            }
+
+            .dark .virtual-lab-mobile-flame-control {
+                background: rgba(39, 39, 42, 0.72) !important;
+                border-color: rgba(255,255,255,0.05) !important;
+                box-shadow:
+                    0 2px 8px rgba(0, 0, 0, 0.2),
+                    0 8px 24px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+            }
+
+            .virtual-lab-mobile-heater-label {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 2px !important;
+                pointer-events: none !important;
+            }
+            
+            .virtual-lab-mobile-heater-label .virtual-lab-thermo-label {
+                font-size: 7px !important;
+            }
+
+            .virtual-lab-flame-slider-track {
+                position: relative !important;
+                width: 6px !important;
+                height: 80px !important;
+                background: rgba(200, 210, 224, 0.4) !important;
+                border-radius: 999px !important;
+                cursor: pointer !important;
+                touch-action: none !important;
+            }
+
+            .dark .virtual-lab-flame-slider-track {
+                background: rgba(63, 63, 70, 0.5) !important;
+            }
+
+            .virtual-lab-flame-slider-fill {
+                position: absolute !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                background: linear-gradient(0deg, #f97316 0%, #ef4444 100%) !important;
+                border-radius: 999px !important;
+                pointer-events: none !important;
+            }
+
+            .virtual-lab-flame-slider-thumb {
+                position: absolute !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 28px !important;
+                height: 28px !important;
+                border-radius: 999px !important;
+                background: white !important;
+                box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+                border: 1.5px solid rgba(0,0,0,0.05) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: grab !important;
+                touch-action: none !important;
+                transition: bottom 0.08s ease-out !important; /* smooth slide movement */
+                pointer-events: none !important;
+            }
+
+            .dark .virtual-lab-flame-slider-thumb {
+                background: #27272a !important;
+                border-color: rgba(255,255,255,0.08) !important;
+            }
+
+            /* Compact reaction info badge */
+            .virtual-lab-reaction-info {
+                top: 8px !important;
+                font-size: 0.75rem !important;
+                padding: 6px 12px !important;
+                max-width: 85% !important;
+            }
+
+            /* Show backdrop overlay when open */
+            .virtual-lab-picker-backdrop {
+                display: block !important;
+            }
+
+            /* Drag handle inside bottom sheet */
+            .virtual-lab-picker-drag-handle {
+                display: flex !important;
+                justify-content: center !important;
+                margin-bottom: 12px !important;
+            }
+            .virtual-lab-picker-drag-handle span {
+                width: 36px;
+                height: 4px;
+                border-radius: 2px;
+                background: rgba(0, 0, 0, 0.15) !important;
+            }
+            .dark .virtual-lab-picker-drag-handle span {
+                background: rgba(255, 255, 255, 0.2) !important;
+            }
+
+            /* Element Selection Picker -> Drawer/Bottom Sheet */
+            .virtual-lab-element-picker {
+                display: flex !important;
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: 50vh !important;
+                overflow-y: auto !important;
+                border-radius: 20px 20px 0 0 !important;
+                box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15) !important;
+                z-index: 200 !important;
+                padding: 8px 16px 24px !important;
+                background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,248,250,0.98) 100%) !important;
+                backdrop-filter: blur(20px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+                border: 1px solid rgba(0, 0, 0, 0.08) !important;
+                border-bottom: none !important;
+                
+                visibility: hidden !important;
+                pointer-events: none !important;
+                transform: translateY(100%) !important;
+                transition: transform 0.3s cubic-bezier(0.32, 0.94, 0.6, 1), 
+                            visibility 0s linear 0.3s !important;
+            }
+            .dark .virtual-lab-element-picker {
+                background: linear-gradient(180deg, rgba(24, 24, 27, 0.98) 0%, rgba(18, 18, 18, 0.98) 100%) !important;
+                border-color: rgba(255, 255, 255, 0.08) !important;
+            }
+            .virtual-lab-element-picker.open {
+                visibility: visible !important;
+                pointer-events: auto !important;
+                transform: translateY(0) !important;
+                transition: transform 0.3s cubic-bezier(0.32, 0.94, 0.6, 1), 
+                            visibility 0s linear 0s !important;
+                animation: none !important;
+            }
+        }
       ` }} />
 
       {/* Header */}
@@ -2720,22 +3019,52 @@ export default function VirtualLab({ onClose }: VirtualLabProps) {
               />
             </div>
 
-            {/* Bottom Controls */}
-            <div className="virtual-lab-controls">
-              <button onClick={addWaterBurst} className="virtual-lab-btn primary flex items-center gap-2" id="virtual-lab-add-water-btn" type="button">
-                <Plus className="w-4 h-4" />
-                {tLab("addWater")}
-              </button>
-              <button onClick={fullReset} className="virtual-lab-btn secondary flex items-center gap-2" id="virtual-lab-clear-water-btn" type="button">
-                <RefreshCw className="w-4 h-4" />
-                {tLab("reset")}
-              </button>
-              <button onClick={() => setPickerOpen(!pickerOpen)} className="virtual-lab-btn secondary flex items-center gap-2" id="virtual-lab-change-element-btn" type="button">
-                <Pencil className="w-4 h-4" />
-                {tLab("element")}
-              </button>
+            {/* Mobile Vertical Flame Slider */}
+            <div className="virtual-lab-mobile-flame-control select-none" id="virtual-lab-mobile-flame-control">
+              <div className="virtual-lab-mobile-heater-label">
+                <span className="virtual-lab-thermo-label">{getHeaterTitle()}</span>
+                <span className="text-[10px] font-black text-orange-600 dark:text-orange-400">
+                  {getHeaterLabel(heaterLevel)}
+                </span>
+              </div>
+              <div 
+                className="virtual-lab-flame-slider-track touch-none"
+                ref={mobileSliderRef}
+                onPointerDown={handleMobileSliderDown}
+                onPointerMove={handleMobileSliderMove}
+                onPointerUp={handleMobileSliderUp}
+                onPointerCancel={handleMobileSliderUp}
+              >
+                <div 
+                  className="virtual-lab-flame-slider-fill"
+                  style={{ height: `${heaterLevel}%` }}
+                />
+                <div 
+                  className="virtual-lab-flame-slider-thumb"
+                  style={{ bottom: `calc(${heaterLevel}% - 14px)` }}
+                >
+                  <Flame className={`w-4 h-4 transition-all duration-300 ${heaterLevel > 0 ? "text-orange-500 fill-orange-500 animate-pulse scale-110" : "text-zinc-400 dark:text-zinc-500"}`} />
+                </div>
+              </div>
             </div>
+
           </div>
+        </div>
+
+        {/* Bottom Controls */}
+        <div className="virtual-lab-controls">
+          <button onClick={addWaterBurst} className="virtual-lab-btn primary flex items-center gap-2" id="virtual-lab-add-water-btn" type="button">
+            <Plus className="w-4 h-4" />
+            {tLab("addWater")}
+          </button>
+          <button onClick={fullReset} className="virtual-lab-btn secondary flex items-center gap-2" id="virtual-lab-clear-water-btn" type="button">
+            <RefreshCw className="w-4 h-4" />
+            {tLab("reset")}
+          </button>
+          <button onClick={() => setPickerOpen(!pickerOpen)} className="virtual-lab-btn secondary flex items-center gap-2" id="virtual-lab-change-element-btn" type="button">
+            <Pencil className="w-4 h-4" />
+            {tLab("element")}
+          </button>
         </div>
 
         {/* Floating Active Chemical Equation Badge */}
@@ -2744,8 +3073,20 @@ export default function VirtualLab({ onClose }: VirtualLabProps) {
           <span className="virtual-lab-reaction-eq ml-1">{reactionInfo ? renderFormulaJSX(reactionInfo) : ""}</span>
         </div>
 
+        {/* Backdrop for picker on mobile */}
+        {pickerOpen && (
+          <div
+            className="virtual-lab-picker-backdrop"
+            onClick={() => setPickerOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
         {/* Element Selection Picker Dropdown */}
         <div ref={elementPickerRef} className={`virtual-lab-element-picker ${pickerOpen ? "open" : ""}`} id="virtual-lab-element-picker">
+          <div className="virtual-lab-picker-drag-handle">
+            <span></span>
+          </div>
           {METAL_ELEMENTS.map(group => (
             <div key={group.group} className="flex flex-col">
               <div className="virtual-lab-picker-group">{group.group}</div>

@@ -225,7 +225,7 @@ export default function ElementCell({
       className={`relative flex flex-col justify-between p-1.5 rounded-xl border aspect-square cursor-pointer transition-all duration-300 select-none group ${
         isPlaceholder
           ? "border-zinc-300/80 dark:border-zinc-800/40 bg-zinc-200/30 dark:bg-zinc-900/10 hover:bg-zinc-200/50 dark:hover:bg-zinc-900/30 hover:scale-100 cursor-default"
-          : `${bgClass} ${textClass} ${borderClass} ${catStyles.hoverBg} hover:scale-105 hover:z-20 hover:shadow-lg`
+          : `${bgClass} ${textClass} ${borderClass} ${catStyles.hoverBg} hover:scale-105 hover:z-20 hover:shadow-lg active:scale-95`
       } ${isDimmed ? "opacity-20 scale-95 blur-[0.5px]" : ""} ${
         isFocused ? "ring-2 ring-yellow-400 shadow-yellow-400/20 scale-[1.03] z-10" : ""
       }`}

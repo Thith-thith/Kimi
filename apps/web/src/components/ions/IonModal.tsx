@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 import { Ion } from "@kimi/data";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { formatChem } from "./IonCard";
@@ -37,6 +38,16 @@ export default function IonModal({ ion, isOpen, onClose }: IonModalProps) {
 
   const [activeLevel, setActiveLevel] = useState(0);
   const [localizedIon, setLocalizedIon] = useState<Ion>(ion);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Load translations for ion details dynamically
   useEffect(() => {
@@ -180,25 +191,75 @@ export default function IonModal({ ion, isOpen, onClose }: IonModalProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent 
         showCloseButton={false}
-        className="max-w-[calc(100%-32px)] md:max-w-[1360px] md:h-[800px] h-[95vh] p-0 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden gap-0 select-none data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-250 text-zinc-900 dark:text-white"
+        className={cn(
+          // Mobile responsive: anchored bottom-to-top drawer
+          "max-md:top-auto max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:translate-x-0 max-md:translate-y-0",
+          "max-md:max-w-full max-md:w-full max-md:h-[95vh] max-md:rounded-t-3xl max-md:rounded-b-none max-md:border-x-0 max-md:border-b-0",
+          
+          // Desktop centered modal
+          "md:max-w-[1360px] md:h-[800px] md:rounded-3xl",
+          
+          // Shared styles
+          "p-0 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-xl shadow-2xl overflow-hidden gap-0 select-none flex flex-col text-zinc-900 dark:text-white",
+          
+          // Animations: slide up on mobile, zoom on desktop
+          "duration-350 ease-out",
+          "data-open:animate-in data-open:fade-in-0 max-md:data-open:slide-in-from-bottom-full md:data-open:zoom-in-95",
+          "data-closed:animate-out data-closed:fade-out-0 max-md:data-closed:slide-out-to-bottom-full md:data-closed:zoom-out-95"
+        )}
       >
+        {/* Mobile Header with Drag Handle & Title */}
+        {isMobile && (
+          <div className="w-full flex flex-col bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-900 relative flex-shrink-0">
+            {/* Drag Handle */}
+            <div className="w-full flex justify-center pt-3 pb-2.5">
+              <div className="w-10 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700/80" />
+            </div>
+            
+            {/* Title & Close Row */}
+            <div className="w-full flex items-center justify-between px-4 pb-3.5 pt-0.5 gap-2">
+              {/* Left: Ion symbol and name */}
+              <div className="flex items-center gap-2 leading-none min-w-0">
+                <span className="text-2xl font-black text-zinc-900 dark:text-white leading-none flex items-start">
+                  <span dangerouslySetInnerHTML={{ __html: parsedSymbol }} />
+                  <sup className={`text-sm font-bold font-mono ${particleColor} ml-0.5`} dangerouslySetInnerHTML={{ __html: parsedCharge }} />
+                </span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold truncate max-w-[120px]">
+                  {localizedIon.name}
+                </span>
+              </div>
+              
+              {/* Right: Close button */}
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:hover:text-white transition-all duration-150 cursor-pointer active:scale-95 border border-zinc-200 dark:border-zinc-800/80 flex-shrink-0"
+                aria-label="Close dialog"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Split Pane Container */}
         <div className="flex flex-col md:flex-row h-full w-full min-w-0">
           
           {/* Left Details Pane: Card Details Slider (35% width) */}
           <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b border-zinc-200 dark:border-zinc-800/60 md:border-b-0">
             
-            {/* Header info - Symbol & Name */}
+            {/* Header info - Symbol & Name (Desktop only) */}
             <div>
-              <div className="flex items-center gap-3 mb-6 select-none pl-1">
-                <h2 className="text-5xl font-black text-zinc-950 dark:text-white tracking-tighter leading-none flex items-start">
-                  <span dangerouslySetInnerHTML={{ __html: parsedSymbol }} />
-                  <sup className={`text-2xl font-bold font-mono ${particleColor} ml-0.5`} dangerouslySetInnerHTML={{ __html: parsedCharge }} />
-                </h2>
-                <span className="text-2xl font-extrabold text-zinc-800 dark:text-zinc-200 tracking-tight ml-2">
-                  {localizedIon.name}
-                </span>
-              </div>
+              {!isMobile && (
+                <div className="flex items-center gap-3 mb-6 select-none pl-1">
+                  <h2 className="text-5xl font-black text-zinc-950 dark:text-white tracking-tighter leading-none flex items-start">
+                    <span dangerouslySetInnerHTML={{ __html: parsedSymbol }} />
+                    <sup className={`text-2xl font-bold font-mono ${particleColor} ml-0.5`} dangerouslySetInnerHTML={{ __html: parsedCharge }} />
+                  </h2>
+                  <span className="text-2xl font-extrabold text-zinc-800 dark:text-zinc-200 tracking-tight ml-2">
+                    {localizedIon.name}
+                  </span>
+                </div>
+              )}
  
               {/* Slider content frame */}
               <div className="relative overflow-hidden min-h-[350px] py-1">
@@ -577,14 +638,16 @@ export default function IonModal({ ion, isOpen, onClose }: IonModalProps) {
           {/* Right Visual Pane: 3D visual & Coming Soon message (65% width) */}
           <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-50/50 dark:bg-zinc-900/10 p-6 flex flex-col items-center justify-between min-h-[350px] md:min-h-[500px]">
             
-            {/* Custom Close Button overlay placed on visual pane top-right */}
-            <button
-              onClick={onClose}
-              className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full bg-zinc-100/80 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-250 dark:border-zinc-800/80 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-905 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95"
-              aria-label="Close dialog"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            {/* Custom Close Button overlay placed on visual pane top-right (Desktop only) */}
+            {!isMobile && (
+              <button
+                onClick={onClose}
+                className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full bg-zinc-100/80 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-250 dark:border-zinc-800/80 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-905 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95"
+                aria-label="Close dialog"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
 
             {/* Glowing Atomic particle visual placeholder */}
             <div className="w-full flex-1 flex flex-col items-center justify-center relative">

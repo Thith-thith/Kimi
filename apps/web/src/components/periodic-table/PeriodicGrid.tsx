@@ -68,7 +68,7 @@ export default function PeriodicGrid({
 
   // Render elements and overlay
   return (
-    <div className="w-full select-none overflow-x-auto pt-3 pb-4">
+    <div className="w-full select-none overflow-x-auto scrollbar-hide scroll-smooth-touch scroll-shadow-x pt-3 pb-4">
       {/* 18-column Periodic Table CSS Grid container */}
       <div
         className="grid grid-cols-18 gap-1.5 md:gap-2 mx-auto min-w-[1000px] max-w-[1300px]"

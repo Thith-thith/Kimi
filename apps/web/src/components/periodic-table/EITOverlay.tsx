@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Settings, RefreshCw, Layers, Sliders, ChevronDown } from "lucide-react";
 import { parseNumericMetric } from "./eitUtils";
@@ -136,7 +137,12 @@ export default function EITOverlay({
 }: EITOverlayProps) {
   const t = useTranslations("eit");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -237,9 +243,9 @@ export default function EITOverlay({
           <ChevronDown className={`w-3.5 h-3.5 text-zinc-500 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
         </button>
 
-        {/* Custom Dropdown Panel */}
+        {/* Custom Dropdown Panel for Desktop */}
         {dropdownOpen && (
-          <div className="absolute top-full left-0 mt-2 w-96 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 rounded-2xl shadow-2xl backdrop-blur-xl p-3 z-50 flex gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="hidden md:flex absolute top-full left-0 mt-2 w-96 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 rounded-2xl shadow-2xl backdrop-blur-xl p-3 z-50 gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
             {/* Classification Group */}
             <div className="flex-1 flex flex-col gap-1">
               <span className="text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase px-2 mb-1.5">
@@ -249,7 +255,7 @@ export default function EITOverlay({
                 <button
                   key={cfg.key}
                   onClick={() => handlePropertySelect(cfg.key)}
-                  className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                  className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     eitProperty === cfg.key
                       ? "bg-zinc-100 dark:bg-white/10 text-zinc-950 dark:text-yellow-400 font-bold"
                       : "text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5"
@@ -264,7 +270,7 @@ export default function EITOverlay({
             <div className="w-[1px] bg-zinc-200 dark:bg-zinc-800/80 self-stretch" />
 
             {/* Numeric Properties Group */}
-            <div className="flex-1 flex flex-col gap-1 max-h-64 overflow-y-auto pr-1">
+            <div className="flex-1 flex flex-col gap-1 max-h-64 overflow-y-auto scrollbar-hide pr-1">
               <span className="text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase px-2 mb-1.5">
                 {t("group.property")}
               </span>
@@ -274,7 +280,7 @@ export default function EITOverlay({
                   <button
                     key={cfg.key}
                     onClick={() => handlePropertySelect(cfg.key)}
-                    className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                    className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       isActive
                         ? "bg-zinc-100 dark:bg-white/10 text-zinc-950 dark:text-yellow-400 font-bold"
                         : "text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5"
@@ -295,6 +301,92 @@ export default function EITOverlay({
           </div>
         )}
       </div>
+
+      {/* Mobile Bottom Sheet Portal */}
+      {dropdownOpen && mounted && typeof document !== "undefined" && createPortal(
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/45 backdrop-blur-xs z-50 md:hidden animate-in fade-in duration-200"
+            onClick={() => setDropdownOpen(false)}
+          />
+          {/* Bottom Sheet Container */}
+          <div className="fixed bottom-0 left-0 right-0 max-h-[85vh] rounded-t-3xl border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.6)] z-50 flex flex-col gap-4 animate-in slide-in-from-bottom duration-300 md:hidden select-none">
+            {/* Mobile Drag Handle & Title */}
+            <div className="flex flex-col items-center gap-2.5 flex-shrink-0 pb-2 border-b border-zinc-150 dark:border-zinc-900">
+              <div className="w-12 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full" />
+              <div className="w-full flex items-center justify-between mt-1 px-1">
+                <span className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider">
+                  {t("ariaController")}
+                </span>
+                <button
+                  onClick={() => setDropdownOpen(false)}
+                  className="text-xs font-bold text-zinc-550 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable list columns */}
+            <div className="flex flex-col sm:flex-row gap-4 overflow-y-auto scrollbar-hide pr-1 pb-2">
+              {/* Classification Group */}
+              <div className="flex flex-col gap-1 flex-shrink-0">
+                <span className="text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase px-2 mb-1.5">
+                  {t("group.classification")}
+                </span>
+                {EIT_PROPERTY_CONFIG.filter((cfg) => cfg.group === "classification").map((cfg) => (
+                  <button
+                    key={cfg.key}
+                    onClick={() => handlePropertySelect(cfg.key)}
+                    className={`w-full text-left px-4 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                      eitProperty === cfg.key
+                        ? "bg-zinc-100 dark:bg-white/10 text-zinc-950 dark:text-yellow-400 font-bold"
+                        : "text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5"
+                    }`}
+                  >
+                    {t(`property.${cfg.key}`)}
+                  </button>
+                ))}
+              </div>
+
+              {/* Horizontal divider on mobile */}
+              <div className="h-[1px] bg-zinc-200 dark:bg-zinc-800/80 w-full flex-shrink-0 sm:hidden" />
+
+              {/* Numeric Properties Group */}
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase px-2 mb-1.5">
+                  {t("group.property")}
+                </span>
+                {EIT_PROPERTY_CONFIG.filter((cfg) => cfg.group === "property").map((cfg) => {
+                  const isActive = eitProperty === cfg.key;
+                  return (
+                    <button
+                      key={cfg.key}
+                      onClick={() => handlePropertySelect(cfg.key)}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-zinc-100 dark:bg-white/10 text-zinc-950 dark:text-yellow-400 font-bold"
+                          : "text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-white/5"
+                      }`}
+                    >
+                      <span>{t(`property.${cfg.key}`)}</span>
+                      {cfg.units && (
+                        <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${isActive ? "bg-yellow-400/20 text-yellow-600 dark:text-yellow-400" : "bg-zinc-100 dark:bg-zinc-800/50 text-zinc-400 dark:text-zinc-500"}`}>
+                          {isActive
+                            ? cfg.units[unitIndex]?.unit || cfg.unit
+                            : cfg.unit}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
 
       {/* Slider Section for Numeric Properties */}
       {isNumeric && eitRange && eitBounds && (

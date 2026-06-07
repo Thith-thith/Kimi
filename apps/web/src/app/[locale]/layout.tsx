@@ -112,12 +112,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className={`${inter.variable} ${kantumruyPro.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <ThemeScript />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <NextIntlClientProvider messages={messages}>
           <Navbar />
-          <main className="flex-1 w-full max-w-[1400px] mx-auto pt-20 pb-8 px-4 md:px-8 flex flex-col justify-start">
+          <main className="flex-1 w-full max-w-[1400px] mx-auto pt-20 pb-24 md:pb-8 px-3 md:px-8 flex flex-col justify-start">
             {children}
           </main>
           <Analytics />

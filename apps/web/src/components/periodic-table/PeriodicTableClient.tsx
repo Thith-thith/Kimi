@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { usePathname } from "../../i18n/routing";
 import { finallyData, Element } from "@kimi/data";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import PeriodicGrid from "./PeriodicGrid";
 import ElementModal from "./ElementModal";
 import EITOverlay from "./EITOverlay";
@@ -99,7 +100,7 @@ export default function PeriodicTableClient() {
   return (
     <div className="flex flex-col items-center w-full min-h-[600px] pt-3">
       {/* Mobile Controls & Legend Header (Visible only on mobile/tablet < lg) */}
-      <div className="w-full lg:hidden bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-xl rounded-3xl p-4 mb-4 flex flex-col gap-4 shadow-md">
+      <div className="w-full lg:hidden bg-white/70 dark:bg-zinc-950/40 border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-xl rounded-2xl p-3 mb-3 flex flex-col gap-3 shadow-md">
         {/* EIT Overlay without grid positioning */}
         <EITOverlay
           eitProperty={eitProperty}
@@ -115,18 +116,20 @@ export default function PeriodicTableClient() {
         />
 
         {/* Table Legend toggle */}
-        <div className="border-t border-zinc-200/50 dark:border-zinc-800/50 pt-3 flex flex-col gap-2">
+        <div className="border-t border-zinc-200/50 dark:border-zinc-800/50 pt-2 flex flex-col gap-2">
           <button
             onClick={() => setIsLegendExpanded(!isLegendExpanded)}
-            className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-bold hover:text-zinc-950 hover:dark:text-white transition-all active:scale-[0.99] cursor-pointer"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-bold hover:text-zinc-950 hover:dark:text-white transition-all active:scale-[0.98] cursor-pointer"
           >
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-400" />
               Category Filters
             </span>
-            <span className="text-[10px] text-zinc-400 font-semibold uppercase">
-              {isLegendExpanded ? "Collapse ▲" : "Expand Legend ▼"}
-            </span>
+            {isLegendExpanded ? (
+              <ChevronUp className="w-4 h-4 text-zinc-400" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-zinc-400" />
+            )}
           </button>
 
           {isLegendExpanded && (
@@ -162,6 +165,11 @@ export default function PeriodicTableClient() {
           onCycleUnit={handleCycleUnit}
           onSelectElement={handleSelectElement}
         />
+
+        {/* Mobile scroll hint */}
+        <p className="lg:hidden text-center text-[11px] text-zinc-400 dark:text-zinc-500 font-medium mt-1 animate-pulse select-none">
+          ← Scroll to explore →
+        </p>
       </div>
 
       {/* Element Detail Modal */}
