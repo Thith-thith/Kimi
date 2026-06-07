@@ -13,5 +13,10 @@
     "build:web": "bun run --filter @kimi/web build",
     "lint": "bun run --filter @kimi/web lint",
     "check": "bun run --filter '*' typecheck"
+  },
+  "dependencies": {
+    "next": "^16.2.7",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   }
 }
