@@ -594,7 +594,7 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
         <div className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-zinc-100 dark:border-zinc-800 pb-4 w-full">
           <div className="flex justify-start min-w-0">
             <h2 className="text-base md:text-lg lg:text-xl font-bold tracking-tight text-zinc-900 dark:text-white truncate">
-              Equation Balancer
+              {tBalancer("title")}
             </h2>
           </div>
 
@@ -872,7 +872,7 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
                       R
                     </span>
                     <span className="text-[10px] font-extrabold uppercase tracking-wider">
-                      REACTANTS
+                      {tBalancer("reactants")}
                     </span>
                   </div>
                   <input
@@ -900,7 +900,7 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
                       P
                     </span>
                     <span className="text-[10px] font-extrabold uppercase tracking-wider">
-                      PRODUCTS
+                      {tBalancer("products")}
                     </span>
                   </div>
                   <input
@@ -989,7 +989,7 @@ export default function EquationBalancer({ onClose }: EquationBalancerProps) {
               {/* Presets List */}
               <div className="space-y-2 pt-3 border-t border-zinc-100 dark:border-zinc-800/80">
                 <span className="text-xs text-zinc-500 dark:text-zinc-550 font-bold uppercase tracking-wider block">
-                  Common Presets
+                  {tBalancer("presets")}
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {BALANCE_PRESETS.map((preset) => (

@@ -312,7 +312,8 @@
     "invalidHydrate": "Invalid hydrate notation",
     "alreadyBalanced": "Already balanced ✓",
     "cantBalanceTitle": "Can't balance this equation",
-    "checkBothSides": "Check the formulas on both sides."
+    "checkBothSides": "Check the formulas on both sides.",
+    "presets": "Common Presets"
   },
   "predictor": {
     "error": "Error",

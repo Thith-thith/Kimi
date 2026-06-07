@@ -295,7 +295,8 @@
     "invalidHydrate": "Invalid hydrate notation",
     "alreadyBalanced": "Already balanced ✓",
     "cantBalanceTitle": "Can't balance this equation",
-    "checkBothSides": "Check the formulas on both sides."
+    "checkBothSides": "Check the formulas on both sides.",
+    "presets": "عام مثالیں"
   },
   "predictor": {
     "error": "غلطی",

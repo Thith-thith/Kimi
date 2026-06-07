@@ -295,7 +295,8 @@
     "invalidHydrate": "水合物格式错误",
     "alreadyBalanced": "已配平 ✓",
     "cantBalanceTitle": "无法配平方程",
-    "checkBothSides": "请检查两边的化学式是否正确。"
+    "checkBothSides": "请检查两边的化学式是否正确。",
+    "presets": "常見預設"
   },
   "predictor": {
     "error": "错误",

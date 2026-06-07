@@ -261,7 +261,8 @@
     "clickToCopy": "Cliquer pour copier",
     "checkInputAgain": "Verifiez la saisie et reessayez",
     "modeBalance": "Équilibrer",
-    "modePredict": "Prédire"
+    "modePredict": "Prédire",
+    "presets": "Exemples courants"
   },
   "predictor": {
     "error": "Erreur",
