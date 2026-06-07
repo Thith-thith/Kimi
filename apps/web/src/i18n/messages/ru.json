@@ -11,7 +11,9 @@
     "settings": "Настройки",
     "about": "О проекте",
     "standard": "Стандарт",
-    "advanced": "Расширенный"
+    "advanced": "Расширенный",
+    "search": "Поиск",
+    "navigation": "Навигация"
   },
   "search": {
     "placeholder": "Поиск...",
@@ -19,9 +21,9 @@
   },
   "mobile": {
     "desktopOnlyTitle": "Только для компьютера",
-    "desktopOnlyText": "Пожалуйста, откройте Zperiod в браузере на компьютере.",
+    "desktopOnlyText": "Пожалуйста, откройте Kimi в браузере на компьютере.",
     "rotateTitle": "Поверните iPad",
-    "rotateText": "Zperiod лучше работает в альбомном режиме. Пожалуйста, поверните устройство."
+    "rotateText": "Kimi лучше работает в альбомном режиме. Пожалуйста, поверните устройство."
   },
   "aria": {
     "changeLanguage": "Сменить язык",
@@ -143,7 +145,7 @@
     "density": "Плотность",
     "energy": "Энергия",
     "sendSuggestion": "Отправить предложение",
-    "suggestHint": "Помогите улучшить Zperiod — выберите тему или напишите свою.",
+    "suggestHint": "Помогите улучшить Kimi — выберите тему или напишите свою.",
     "sendBtnText": "Отправить",
     "preferences": "Preferences",
     "appearance": "Appearance",
@@ -568,13 +570,13 @@
   },
   "assistant": {
     "fabAriaOpen": "Open AI Assistant",
-    "name": "Zperiod AI",
+    "name": "Kimi AI",
     "status": "Chemistry Assistant",
     "closeAria": "Close assistant",
     "stopAria": "Stop generation",
     "inputPlaceholder": "Ask a chemistry question...",
     "sendAria": "Send message",
-    "welcomeLine1": "Welcome to Zperiod AI. How can I assist you with chemistry today?",
+    "welcomeLine1": "Welcome to Kimi AI. How can I assist you with chemistry today?",
     "welcomeLine2": "You can ask me directly to:",
     "welcomeMolar": "Calculate molar mass (e.g., H2O)",
     "welcomeBalance": "Balance equations (e.g., Fe + O2 -> Fe2O3)",
@@ -720,7 +722,7 @@
   },
   "onboarding": {
     "phrases": [
-      "Добро пожаловать в Zperiod",
+      "Добро пожаловать в Kimi",
       "Интерактивная химия",
       "Изучайте элементы",
       "Молекулярные чудеса"

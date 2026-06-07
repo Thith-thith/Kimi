@@ -11,7 +11,9 @@
     "settings": "Ayos",
     "about": "Tungkol",
     "standard": "Batayan",
-    "advanced": "Mas Malalim"
+    "advanced": "Mas Malalim",
+    "search": "Maghanap",
+    "navigation": "Nabigasyon"
   },
   "search": {
     "placeholder": "Maghanap...",
@@ -19,9 +21,9 @@
   },
   "mobile": {
     "desktopOnlyTitle": "Desktop Lamang",
-    "desktopOnlyText": "Pakibuksan ang Zperiod sa desktop browser.",
+    "desktopOnlyText": "Pakibuksan ang Kimi sa desktop browser.",
     "rotateTitle": "I-rotate ang iyong iPad",
-    "rotateText": "Mas maganda ang Zperiod sa landscape mode. Mangyaring i-rotate ang iyong device."
+    "rotateText": "Mas maganda ang Kimi sa landscape mode. Mangyaring i-rotate ang iyong device."
   },
   "aria": {
     "changeLanguage": "Palitan ang wika",
@@ -143,7 +145,7 @@
     "density": "Densidad",
     "energy": "Enerhiya",
     "sendSuggestion": "Magpadala ng mungkahi",
-    "suggestHint": "Tulungan kaming pagandahin ang Zperiod — pumili ng paksa o isulat ang sarili mong mungkahi.",
+    "suggestHint": "Tulungan kaming pagandahin ang Kimi — pumili ng paksa o isulat ang sarili mong mungkahi.",
     "sendBtnText": "Ipadala",
     "preferences": "Preferences",
     "appearance": "Appearance",
@@ -568,13 +570,13 @@
   },
   "assistant": {
     "fabAriaOpen": "Open AI Assistant",
-    "name": "Zperiod AI",
+    "name": "Kimi AI",
     "status": "Chemistry Assistant",
     "closeAria": "Close assistant",
     "stopAria": "Stop generation",
     "inputPlaceholder": "Ask a chemistry question...",
     "sendAria": "Send message",
-    "welcomeLine1": "Welcome to Zperiod AI. How can I assist you with chemistry today?",
+    "welcomeLine1": "Welcome to Kimi AI. How can I assist you with chemistry today?",
     "welcomeLine2": "You can ask me directly to:",
     "welcomeMolar": "Calculate molar mass (e.g., H2O)",
     "welcomeBalance": "Balance equations (e.g., Fe + O2 -> Fe2O3)",
@@ -720,7 +722,7 @@
   },
   "onboarding": {
     "phrases": [
-      "Maligayang pagdating sa Zperiod",
+      "Maligayang pagdating sa Kimi",
       "Interactive na Chemistry",
       "Kabisaduhin ang mga Elemento",
       "Mga kamangha-manghang molekular"

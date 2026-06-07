@@ -11,7 +11,9 @@
     "settings": "设置",
     "about": "关于",
     "standard": "标准版",
-    "advanced": "高级版"
+    "advanced": "高级版",
+    "search": "搜索",
+    "navigation": "导航"
   },
   "search": {
     "placeholder": "搜索...",
@@ -19,9 +21,9 @@
   },
   "mobile": {
     "desktopOnlyTitle": "仅支持桌面端体验",
-    "desktopOnlyText": "请在桌面浏览器中访问 Zperiod。",
+    "desktopOnlyText": "请在桌面浏览器中访问 Kimi。",
     "rotateTitle": "请横屏使用",
-    "rotateText": "Zperiod 在横屏模式下体验更佳，请旋转您的设备。"
+    "rotateText": "Kimi 在横屏模式下体验更佳，请旋转您的设备。"
   },
   "aria": {
     "changeLanguage": "切换语言",
@@ -145,7 +147,7 @@
     "density": "密度",
     "energy": "能量",
     "sendSuggestion": "发送反馈",
-    "suggestHint": "帮助我们改进 Zperiod — 选择一个话题或自由输入。",
+    "suggestHint": "帮助我们改进 Kimi — 选择一个话题或自由输入。",
     "sendBtnText": "发送",
     "preferences": "高级能力",
     "appearance": "外观设置",
@@ -570,13 +572,13 @@
   },
   "assistant": {
     "fabAriaOpen": "打开 AI 助手",
-    "name": "Zperiod AI",
+    "name": "Kimi AI",
     "status": "化学助手",
     "closeAria": "关闭助手",
     "stopAria": "停止生成",
     "inputPlaceholder": "输入一个化学问题...",
     "sendAria": "发送消息",
-    "welcomeLine1": "欢迎使用 Zperiod AI。今天想了解什么化学内容？",
+    "welcomeLine1": "欢迎使用 Kimi AI。今天想了解什么化学内容？",
     "welcomeLine2": "你可以直接让我：",
     "welcomeMolar": "计算摩尔质量（例如 H2O）",
     "welcomeBalance": "配平化学方程式（例如 Fe + O2 -> Fe2O3）",
@@ -722,7 +724,7 @@
   },
   "onboarding": {
     "phrases": [
-      "欢迎来到 Zperiod",
+      "欢迎来到 Kimi",
       "互动化学世界",
       "探索元素奥秘",
       "分子之美"

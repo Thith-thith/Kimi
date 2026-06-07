@@ -278,7 +278,7 @@ export default function Navbar() {
               <motion.div variants={itemVariants} className="border-t border-zinc-200/60 dark:border-zinc-800/60 pt-5 flex items-center justify-center">
                 {/* Copyright Info */}
                 <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">
-                  © {new Date().getFullYear()} Zperiod
+                  © {new Date().getFullYear()} Kimi
                 </span>
               </motion.div>
             </motion.div>

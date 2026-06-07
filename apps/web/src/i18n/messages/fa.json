@@ -11,7 +11,9 @@
     "settings": "تنظیمات",
     "about": "درباره ما",
     "standard": "استاندارد",
-    "advanced": "پیشرفته"
+    "advanced": "پیشرفته",
+    "search": "جستجو",
+    "navigation": "ناوبری"
   },
   "search": {
     "placeholder": "جستجو...",
@@ -19,9 +21,9 @@
   },
   "mobile": {
     "desktopOnlyTitle": "فقط نسخه دسکتاپ",
-    "desktopOnlyText": "لطفا Zperiod را در مرورگر دسکتاپ باز کنید.",
+    "desktopOnlyText": "لطفا Kimi را در مرورگر دسکتاپ باز کنید.",
     "rotateTitle": "آیپد را بچرخانید",
-    "rotateText": "Zperiod در حالت افقی بهتر عمل می‌کند. لطفاً دستگاه خود را بچرخانید."
+    "rotateText": "Kimi در حالت افقی بهتر عمل می‌کند. لطفاً دستگاه خود را بچرخانید."
   },
   "aria": {
     "changeLanguage": "تغییر زبان",
@@ -143,7 +145,7 @@
     "density": "چگالی",
     "energy": "انرژی",
     "sendSuggestion": "ارسال پیشنهاد",
-    "suggestHint": "به ما کمک کنید Zperiod را بهتر کنیم — یک موضوع انتخاب کنید یا پیشنهاد خودتان را بنویسید.",
+    "suggestHint": "به ما کمک کنید Kimi را بهتر کنیم — یک موضوع انتخاب کنید یا پیشنهاد خودتان را بنویسید.",
     "sendBtnText": "ارسال",
     "preferences": "Preferences",
     "appearance": "Appearance",
@@ -568,13 +570,13 @@
   },
   "assistant": {
     "fabAriaOpen": "Open AI Assistant",
-    "name": "Zperiod AI",
+    "name": "Kimi AI",
     "status": "Chemistry Assistant",
     "closeAria": "Close assistant",
     "stopAria": "Stop generation",
     "inputPlaceholder": "Ask a chemistry question...",
     "sendAria": "Send message",
-    "welcomeLine1": "Welcome to Zperiod AI. How can I assist you with chemistry today?",
+    "welcomeLine1": "Welcome to Kimi AI. How can I assist you with chemistry today?",
     "welcomeLine2": "You can ask me directly to:",
     "welcomeMolar": "Calculate molar mass (e.g., H2O)",
     "welcomeBalance": "Balance equations (e.g., Fe + O2 -> Fe2O3)",
@@ -720,7 +722,7 @@
   },
   "onboarding": {
     "phrases": [
-      "به Zperiod خوش آمدید",
+      "به Kimi خوش آمدید",
       "شیمی تعاملی",
       "تسلط بر عناصر",
       "عجایب مولکولی"
