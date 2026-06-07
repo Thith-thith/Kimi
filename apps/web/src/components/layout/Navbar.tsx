@@ -29,34 +29,36 @@ const NAV_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const containerVariants = {
-  hidden: { opacity: 0, scale: 0.96, y: -10 },
+  hidden: { opacity: 0, scale: 0.95, y: -20 },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
     transition: {
-      staggerChildren: 0.04,
-      delayChildren: 0.03,
-      duration: 0.2,
-      ease: "easeOut",
+      staggerChildren: 0.05,
+      delayChildren: 0.05,
+      type: "spring",
+      stiffness: 260,
+      damping: 26,
     } as any,
   },
   exit: {
     opacity: 0,
-    scale: 0.96,
-    y: -10,
+    scale: 0.95,
+    y: -15,
     transition: {
-      duration: 0.15,
-      ease: "easeIn",
+      duration: 0.2,
+      ease: "easeInOut",
     } as any,
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: -8 },
+  hidden: { opacity: 0, y: 15, scale: 0.97 },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: {
       type: "spring",
       stiffness: 300,

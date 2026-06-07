@@ -15,6 +15,7 @@ interface EITOverlayProps {
   onChangeRange: (min: number, max: number) => void;
   unitIndex: number;
   onCycleUnit: (prop: string) => void;
+  isGridItem?: boolean;
 }
 
 export const EIT_PROPERTY_CONFIG = [
@@ -131,6 +132,7 @@ export default function EITOverlay({
   onChangeRange,
   unitIndex,
   onCycleUnit,
+  isGridItem = true,
 }: EITOverlayProps) {
   const t = useTranslations("eit");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -213,11 +215,11 @@ export default function EITOverlay({
 
   return (
     <div
-      style={{
+      style={isGridItem ? {
         gridColumn: "2 / 18",
         gridRow: "1",
-      }}
-      className="flex items-center gap-3 w-full self-center h-12 relative z-40 bg-white/85 dark:bg-zinc-950/45 p-1 px-3 border border-zinc-200 dark:border-zinc-900 rounded-full backdrop-blur-md shadow-md"
+      } : undefined}
+      className={`flex items-center gap-3 w-full self-center h-12 relative z-40 bg-white/85 dark:bg-zinc-950/45 p-1 px-3 border border-zinc-200 dark:border-zinc-900 rounded-full backdrop-blur-md shadow-md ${isGridItem ? "hidden lg:flex" : ""}`}
     >
       {/* Property Selector Trigger */}
       <div ref={dropdownRef} className="relative flex-shrink-0">

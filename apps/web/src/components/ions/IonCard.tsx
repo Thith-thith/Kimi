@@ -78,7 +78,7 @@ export default function IonCard({ ion, onClick }: IonCardProps) {
     if (match) {
       const baseSymbol = match[1];
       const subText = match[2];
-      symbolContent = `${baseSymbol}<span className="inline-flex flex-col text-[10px] align-middle ml-0.5 leading-none"><sup>${parsedCharge}</sup><sub>${subText}</sub></span>`;
+      symbolContent = `${baseSymbol}<span class="inline-flex flex-col text-[10px] align-middle ml-0.5 leading-none"><sup>${parsedCharge}</sup><sub>${subText}</sub></span>`;
     } else {
       symbolContent = `${parsedSymbol}<sup>${parsedCharge}</sup>`;
     }

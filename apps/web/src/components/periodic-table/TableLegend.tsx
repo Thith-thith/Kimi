@@ -8,6 +8,7 @@ interface TableLegendProps {
   hoveredCategory: string | null;
   onHoverCategory: (category: string | null) => void;
   activeProperty: string;
+  isGridItem?: boolean;
 }
 
 const LEGEND_ITEMS = [
@@ -48,6 +49,7 @@ export default function TableLegend({
   hoveredCategory,
   onHoverCategory,
   activeProperty,
+  isGridItem = true,
 }: TableLegendProps) {
   const t = useTranslations("tableLegend");
 
@@ -71,11 +73,11 @@ export default function TableLegend({
 
   return (
     <div
-      style={{
+      style={isGridItem ? {
         gridColumn: "3 / 13",
         gridRow: "1 / 4",
-      }}
-      className="flex flex-col items-center justify-center p-2 z-30 select-none pointer-events-none mt-2"
+      } : undefined}
+      className={`flex flex-col items-center justify-center p-2 z-30 select-none pointer-events-none mt-2 ${isGridItem ? "hidden lg:flex" : ""}`}
     >
       {isDefaultCategory ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 pointer-events-auto">

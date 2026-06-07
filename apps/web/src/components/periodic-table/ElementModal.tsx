@@ -151,6 +151,19 @@ export default function ElementModal({
   const [hoveredSubshell, setHoveredSubshell] = useState<string | null>(null);
   const [selectedSubshell, setSelectedSubshell] = useState<string | null>(null);
 
+  // Mobile layout states
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeMobileTab, setActiveMobileTab] = useState<"info" | "model">("info");
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     if (isOpen && hasHydrated && isCardIndexLocked) {
       setActiveLevel(defaultCardIndex);
@@ -162,6 +175,7 @@ export default function ElementModal({
       setShowLayers(false);
       setHoveredSubshell(null);
       setSelectedSubshell(null);
+      setActiveMobileTab("info");
     }
   }, [isOpen, element, isCardIndexLocked, defaultCardIndex, hasHydrated, reduceMotion, animationPaused]);
 
@@ -180,45 +194,95 @@ export default function ElementModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent 
         showCloseButton={false}
-        className="max-w-[calc(100%-32px)] md:max-w-[1360px] md:h-[800px] h-[95vh] p-0 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden gap-0 select-none data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-250"
+        className="max-w-[calc(100%-32px)] md:max-w-[1360px] md:h-[800px] h-[95vh] p-0 bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden gap-0 select-none data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-250 flex flex-col"
       >
-        {/* Split Pane Container */}
-        <div className="flex flex-col md:flex-row h-full w-full min-w-0">
-          
-          {/* Left Details Pane: Card Details Slider (35% width) */}
-          <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b border-zinc-200 dark:border-zinc-800/60 md:border-b-0">
-            {/* Nuclide Header Stack info */}
-            <div className="flex items-center gap-3 mb-6 select-none pl-1">
-              <div className="flex flex-col text-right leading-none font-bold text-xs font-mono text-zinc-500 dark:text-zinc-400 select-none gap-0.5">
-                <span>{roundedMass}</span>
-                <span>{element.id}</span>
-              </div>
-              <h2 className="text-5xl font-black text-zinc-900 dark:text-white tracking-tighter leading-none">
+        {/* Mobile Tab Swapper Header */}
+        {isMobile && (
+          <div className="w-full flex items-center justify-center p-3 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-900 relative flex-shrink-0">
+            {/* Nuclide Header Stack info on mobile */}
+            <div className="absolute left-4 flex items-center gap-1.5 leading-none select-none">
+              <span className="text-xl font-black text-zinc-900 dark:text-white leading-none">
                 {element.symbol}
-              </h2>
-              <span className="text-2xl font-extrabold text-zinc-800 dark:text-zinc-200 tracking-tight ml-2">
+              </span>
+              <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-semibold truncate max-w-[80px]">
                 {localizedName}
               </span>
             </div>
 
-            <CardSlider
-              element={localizedElement}
-              activeLevel={activeLevel}
-              onChangeLevel={setActiveLevel}
-            />
-          </div>
-
-          {/* Right Visual Pane: 3D Atom Renderer (65% width) */}
-          <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-900/10 p-6 flex flex-col items-center justify-between min-h-[350px] md:min-h-[500px]">
+            <div className="inline-flex p-0.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800 rounded-full">
+              <button
+                onClick={() => setActiveMobileTab("info")}
+                className={`px-4 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                  activeMobileTab === "info"
+                    ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs"
+                    : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                }`}
+              >
+                Details
+              </button>
+              <button
+                onClick={() => setActiveMobileTab("model")}
+                className={`px-4 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                  activeMobileTab === "model"
+                    ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs"
+                    : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                }`}
+              >
+                3D Model
+              </button>
+            </div>
             
-            {/* Custom Close Button overlay */}
+            {/* Mobile Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-zinc-555 dark:text-zinc-400 hover:text-zinc-900 hover:dark:text-white hover:border-zinc-300 hover:dark:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+              className="absolute right-4 w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-805 flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:hover:text-white transition-all duration-200 cursor-pointer active:scale-95 border border-zinc-200 dark:border-zinc-800"
               aria-label="Close dialog"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
+          </div>
+        )}
+
+        {/* Split Pane Container */}
+        <div className="flex flex-col md:flex-row flex-1 min-h-0 w-full">
+          
+          {/* Left Details Pane: Card Details Slider (35% width) */}
+          {(!isMobile || activeMobileTab === "info") && (
+            <div className="w-full md:w-[35%] min-w-0 p-6 md:p-8 flex flex-col justify-between overflow-y-auto bg-zinc-50/50 dark:bg-zinc-950/40 md:border-r border-zinc-200 dark:border-zinc-800/60 border-b border-zinc-200 dark:border-zinc-800/60 md:border-b-0 h-full">
+              {/* Nuclide Header Stack info */}
+              <div className="hidden md:flex items-center gap-3 mb-6 select-none pl-1">
+                <div className="flex flex-col text-right leading-none font-bold text-xs font-mono text-zinc-500 dark:text-zinc-400 select-none gap-0.5">
+                  <span>{roundedMass}</span>
+                  <span>{element.id}</span>
+                </div>
+                <h2 className="text-5xl font-black text-zinc-900 dark:text-white tracking-tighter leading-none">
+                  {element.symbol}
+                </h2>
+                <span className="text-2xl font-extrabold text-zinc-800 dark:text-zinc-200 tracking-tight ml-2">
+                  {localizedName}
+                </span>
+              </div>
+
+              <CardSlider
+                element={localizedElement}
+                activeLevel={activeLevel}
+                onChangeLevel={setActiveLevel}
+              />
+            </div>
+          )}
+
+          {/* Right Visual Pane: 3D Atom Renderer (65% width) */}
+          {(!isMobile || activeMobileTab === "model") && (
+            <div className="relative w-full md:w-[65%] min-w-0 overflow-hidden bg-zinc-900/10 p-6 flex flex-col items-center justify-between min-h-[350px] md:min-h-[500px] h-full flex-1">
+              
+              {/* Custom Close Button overlay */}
+              <button
+                onClick={onClose}
+                className="absolute top-6 right-6 z-20 w-8 h-8 rounded-full bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-zinc-555 dark:text-zinc-400 hover:text-zinc-900 hover:dark:text-white hover:border-zinc-300 hover:dark:border-zinc-700 transition-all duration-200 cursor-pointer active:scale-95 shadow-sm hidden md:flex"
+                aria-label="Close dialog"
+              >
+                <X className="w-4 h-4" />
+              </button>
 
             {/* Top left: Occupied subshells pills (only when layers mode is active) */}
             {showLayers && (
@@ -403,6 +467,7 @@ export default function ElementModal({
             </div>
 
           </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
