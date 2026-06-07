@@ -1,8 +1,8 @@
 # Dependency directories
 node_modules/
 
-# Lock files (optional, but requested to ignore)
-bun.lock
+# Lock files
+# bun.lock is tracked to ensure deterministic installs on Vercel
 bun.lockb
 
 # Build outputs
